@@ -27,18 +27,18 @@ pub fn executor() -> Result<(), String> {
 	// Firstly, the wasm code is needed,
 	// It is represented in a binary format so we will just load it
 	// from the file (you can the use the function just right above).
-	let wasm_code = todo!();
+	let wasm_code = load_wasm_code("../target/wasm32-unknown-unknown/release/wasm_code.wasm")?;
 
 	// TODO 2:
 	// You now need to create the Global compilation environment for
 	// WebAssembly. We will use the default one as they do in the docs.
-	let engine = todo!();
+	let engine = Engine::default();
 
 	// TODO 3:
 	// Compile the Wasm code, the output will represent
 	// the in-memory JIT code which is ready
 	// to be executed after being instantiated
-	let module = todo!();
+	let module = Module::new(&engine, &wasm_code).unwrap();
 
 	// TODO 4:
 	// Create the Store, which will contain all the information related to
@@ -46,22 +46,25 @@ pub fn executor() -> Result<(), String> {
 	//
 	// The Store also allows inserting arbitrary data, but we will not use
 	// them in this executor
-	let mut store = todo!();
+	let mut store = Store::new(&engine, 4);
 
 	// TODO 5:
 	// Instantiate the wasm code
-	let instance = todo!();
+	let instance = Instance::new(&mut store, &module, &[]).unwrap();
 
 	// TODO 6:
 	// Extract the entry point "div" from the just-instantiated code
-	let div = todo!();
+	// let div = instance.get_typed_func::<(i32, i32), i32>(&mut store, "div").unwrap();
+	let remote = instance.get_typed_func::<(f32, f32), f32>(&mut store, "sum_floats").unwrap();
 
 	// TODO 7:
 	// Execute the wasm function!
-	let (x, y) = (10, 2);
-	let result: i32 = todo!();
+	// let (x, y) = (16, 2);
+	// let result: i32 = div.call(&mut store, (x, y)).unwrap();
 
-	println!("{x} / {y} = {result}");
+	// println!("{x} / {y} = {result}");
+	let wen_result = remote.call(&mut store, (3.2, 3.3)).unwrap();
+	println!("{:?}", wen_result);
 
 	Ok(())
 }

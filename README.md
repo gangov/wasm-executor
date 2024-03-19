@@ -152,7 +152,7 @@ In the first executor you just created the environment, instantiate and then exe
 - Create and bind the host functions
 - Instantiate and execute the wasm code on the `SharedState`
 
-To get started, follow the instructions in `wasm_code/src/lib_ex_3.rs` **and** `rust_executor/src/executor.rs``
+To get started, follow the instructions in `wasm_code/src/lib_ex4.rs` **and** `rust_executor/src/executor.rs``
 
 ### Compilation and Execution
 

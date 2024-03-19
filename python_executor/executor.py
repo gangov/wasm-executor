@@ -10,7 +10,7 @@ store = Store()
 
 # Compile the Wasm code, the output will represent the in-memory JIT code which is ready
 # to be executed after being instantiated
-module = Module.from_file(store.engine, '../wasm_code/target/wasm32-unknown-unknown/release/wasm_code.wasm')
+module = Module.from_file(store.engine, '../target/wasm32-unknown-unknown/release/wasm_code.wasm')
 
 # Instantiate the wasm code
 instance = Instance(store, module, [])

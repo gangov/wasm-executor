@@ -8,8 +8,8 @@
 // Those function will be translated to "Imports" in wasm,
 // and provided by the executor
 extern "C" {
-    todo!("define set function");
-    todo!("define get function");
+	fn get() -> u32;
+	fn set(val: u32);
 }
 
 // One inconvenience with the host function definition above is that
@@ -18,10 +18,15 @@ extern "C" {
 /// A wrapper around the `set` host function to avoid writing
 // every time 'unsafe'
 fn set_hf(val: u32) {
-    todo!()
+	unsafe {
+		set(val);
+	}
 }
 
 //TODO also implement get_hf
+fn get_hf() -> u32 {
+	unsafe { get() }
+}
 
 /// Implement the entry point described in the Readme.
 /// The logic may do whatever you want, but you will only be able to
@@ -30,5 +35,6 @@ fn set_hf(val: u32) {
 /// Remember not to change the name of the entry point for the executor will get confused.
 #[no_mangle]
 fn start() {
-    todo!()
+	let val = get_hf();
+	set_hf(val + 100_000);
 }

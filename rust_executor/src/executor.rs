@@ -45,22 +45,26 @@ pub fn executor(name: &str, shared_state: SharedState) -> Result<SharedState, St
 	// WebAssembly objects such as functions, instances, memories, etc
 	//
 	// The Store allows inserting also arbitrary data (SharedState)
-	todo!();
+	let mut store = Store::new(&engine, shared_state);
 
 	// TODO 2:
 	// Crete the Host Functions
-	todo!();
+	let get = Func::wrap(&mut store, |a: u32| a);
+	let set = Func::wrap(&mut store, |a: u32| ());
 
 	// TODO 3:
 	// Instantiate the wasm code
-	todo!();
+	let instance = Instance::new(&mut store, &module, &[get.into(), set.into()])
+		.map_err(|err| err.to_string())?;
 
 	// TODO 4:
 	// Extract the entry point "start" from the just instantiated link
 	// end execute it!!
-	todo!();
+	let start = instance
+		.get_typed_func::<(), u32>(&mut store, "start")
+		.map_err(|err| err.to_string())?;
 
 	// TODO 5:
 	// Just return the new SharedState
-	todo!()
+	Ok(SharedState { val: start.call(&mut store, ()).map_err(|err| err.to_string())? })
 }
